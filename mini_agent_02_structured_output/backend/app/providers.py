@@ -126,7 +126,7 @@ def generate_structured_gemini(
         config=types.GenerateContentConfig(
             system_instruction=system_prompt,
             response_mime_type="application/json",
-            response_schema=get_structured_model(schema_type),
+            response_schema=_gemini_response_schema(get_structured_model(schema_type)),
         ),
     )
     parsed = get_structured_model(schema_type).model_validate_json(response.text or "{}")
@@ -134,6 +134,23 @@ def generate_structured_gemini(
         "gemini", settings.gemini_model, parsed.model_dump(),
         round((perf_counter() - started) * 1000),
     )
+
+
+def _gemini_response_schema(model_class: type[TravelPlan] | type[SupportTicket]) -> dict[str, Any]:
+    """Return the Pydantic schema without a field unsupported by Gemini's API."""
+    schema = model_class.model_json_schema()
+
+    def remove_additional_properties(value: Any) -> None:
+        if isinstance(value, dict):
+            value.pop("additionalProperties", None)
+            for child in value.values():
+                remove_additional_properties(child)
+        elif isinstance(value, list):
+            for child in value:
+                remove_additional_properties(child)
+
+    remove_additional_properties(schema)
+    return schema
 
 
 def _gemini_client() -> tuple[Any, Any]:
