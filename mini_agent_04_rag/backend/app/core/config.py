@@ -5,7 +5,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
 load_dotenv(PROJECT_ROOT / ".env")
 
 
@@ -28,8 +28,11 @@ class Settings:
     )
     rag_collection: str = os.getenv("RAG_COLLECTION", "mini_agent_travel")
     rag_min_score: float = float(os.getenv("RAG_MIN_SCORE", "0.35"))
+    redis_url: str = os.getenv("REDIS_URL", "redis://127.0.0.1:6379/0")
+    rag_cache_ttl_seconds: int = int(os.getenv("RAG_CACHE_TTL_SECONDS", "300"))
     request_timeout_seconds: float = float(os.getenv("REQUEST_TIMEOUT_SECONDS", "60"))
     max_image_size_mb: int = int(os.getenv("MAX_IMAGE_SIZE_MB", "10"))
+    max_pdf_size_mb: int = int(os.getenv("MAX_PDF_SIZE_MB", "20"))
 
 
 settings = Settings()
