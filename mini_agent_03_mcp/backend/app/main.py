@@ -3,7 +3,7 @@ from fastapi import FastAPI, HTTPException
 from .agent import run_agent
 from .mcp_client import MCP_SERVERS, discover_resources, discover_tools, read_resource
 from .schemas import McpRunRequest, McpRunResult
-
+import traceback
 
 app = FastAPI(title="Mini Agent 03 MCP", version="1.0.0")
 
@@ -75,4 +75,8 @@ async def run_mcp_agent(payload: McpRunRequest) -> McpRunResult:
     except ValueError as error:
         raise HTTPException(status_code=400, detail=str(error)) from error
     except Exception as error:
-        raise HTTPException(status_code=503, detail=f"MCP Agent 실행 실패: {error}") from error
+        traceback.print_exc()
+        raise HTTPException(
+            status_code=503,
+            detail=f"MCP Agent 실행 실패: {error}",
+        ) from error
