@@ -2,7 +2,7 @@ def fixed_workflow(message: str) -> dict:
     return {"route": "travel_plan", "reason": "입력과 관계없이 정한 단계로 이동합니다.", "confidence": 1.0}
 
 
-def mock_semantic_router(message: str) -> dict:
+def semantic_router(message: str) -> dict:
     if any(word in message for word in ("날씨", "기온", "우산", "비가", "비예보")):
         return {"route": "weather", "reason": "날씨 표현을 찾았습니다.", "confidence": 0.92}
     if any(word in message for word in ("호텔", "숙소", "예약")):
@@ -13,4 +13,4 @@ def mock_semantic_router(message: str) -> dict:
 
 
 def compare_decisions(message: str) -> dict:
-    return {"message": message, "workflow": fixed_workflow(message), "semantic_router": mock_semantic_router(message), "note": "Router의 판단만으로는 Agent가 아닙니다. Tool 실행, 결과 관찰, 종료 판단이 추가되어야 합니다."}
+    return {"message": message, "workflow": fixed_workflow(message), "semantic_router": semantic_router(message), "note": "Router의 판단만으로는 Agent가 아닙니다. Tool 실행, 결과 관찰, 종료 판단이 추가되어야 합니다."}

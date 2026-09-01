@@ -24,3 +24,8 @@
 - 사용자가 자신의 Memory 목록을 확인할 수 있습니다.
 - Redis 단기 상태와 PostgreSQL 장기 Memory를 구분합니다.
 - 비밀번호나 인증정보를 저장하지 않습니다.
+- Redis Key가 사용자와 Session을 함께 구분합니다.
+- 오래된 version이 최신 Session을 덮어쓰지 않습니다.
+- PostgreSQL 조회·삭제가 항상 user_id 범위를 강제합니다.
+- 실제 답변에 사용된 Memory와 Trace를 표시합니다.
+- 사용자가 자신의 Memory를 내보내고 전체 삭제할 수 있습니다.

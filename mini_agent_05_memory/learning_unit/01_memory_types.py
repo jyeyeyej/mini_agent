@@ -1,4 +1,12 @@
-"""대화 기록, 단기 상태, 장기 Memory, RAG 문서를 비교합니다."""
+"""01. 대화 기록, 단기 상태, 장기 Memory, RAG 문서를 비교합니다.
+
+학습 목표:
+- 비슷해 보이는 네 가지 데이터의 목적과 보관 기간을 구분합니다.
+- Memory와 RAG가 서로 다른 문제를 해결한다는 점을 이해합니다.
+
+실행: python .\01_memory_types.py
+외부 서비스: 필요 없음
+"""
 
 MEMORY_TYPES = [
     {
@@ -29,7 +37,11 @@ MEMORY_TYPES = [
 
 
 if __name__ == "__main__":
+    print("[01] Memory와 RAG 데이터 종류\n")
     for item in MEMORY_TYPES:
-        print(item)
+        print(f"- {item['type']}")
+        print(f"  예: {item['example']}")
+        print(f"  보관 기간: {item['lifetime']}")
+        print(f"  저장소: {item['storage']}")
 
-    print("\nMemory는 사용자나 대화의 상태이고, RAG는 외부 지식 문서를 검색합니다.")
+    print("\n핵심: Memory는 사용자나 대화의 상태이고, RAG는 외부 지식 문서를 검색합니다.")
