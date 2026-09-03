@@ -1,13 +1,14 @@
 fastapi
+google-genai
 httpx
 langgraph
-mcp>=1.27,<2
 openai
+ollama
+pgvector
 psycopg[binary]
 pydantic
 python-dotenv
 redis
-requests
 streamlit
-uvicorn[standard]
+uvicorn
 pytest
