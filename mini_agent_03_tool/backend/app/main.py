@@ -8,11 +8,11 @@ from app.routers.lab_router import lab_router
 
 TAGS_METADATA = [
     {
-        "name": "01 · LLM 기초",
+        "name": "01 · LLM 기초 및 Provider",
         "description": "Provider, 일반 생성, 요청 분류와 Multimodal 기본 기능입니다.",
     },
     {
-        "name": "02 · Prompt와 구조화 출력",
+        "name": "02 · Prompt와 구조화 출력 (Structured Output)",
         "description": "Prompt 구성, Pydantic 검증과 Structured Output 기능입니다.",
     },
     {
