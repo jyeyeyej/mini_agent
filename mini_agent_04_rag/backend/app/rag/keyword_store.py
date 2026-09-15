@@ -2,7 +2,7 @@ import re
 
 from app.rag.chunking import split_document
 from app.rag.documents import TRAVEL_DOCUMENTS
-from app.schemas import RagSearchItem
+from app.schemas import SearchItem
 
 
 def tokenize(text: str) -> set[str]:
@@ -22,7 +22,7 @@ def all_chunks():
     ]
 
 
-def keyword_search(query: str, top_k: int = 3) -> list[RagSearchItem]:
+def keyword_search(query: str, top_k: int = 3) -> list[SearchItem]:
     query_tokens = tokenize(query)
     results = []
     for chunk in all_chunks():
@@ -30,7 +30,7 @@ def keyword_search(query: str, top_k: int = 3) -> list[RagSearchItem]:
         score = len(common) / max(len(query_tokens), 1)
         if score > 0:
             results.append(
-                RagSearchItem(
+                SearchItem(
                     title=chunk.title,
                     content=chunk.text,
                     source=chunk.source,

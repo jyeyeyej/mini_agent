@@ -1,0 +1,41 @@
+name: mini-agent-03-tool
+
+# 교육용 기본 구성입니다. Backend와 Streamlit Frontend만 컨테이너로 실행하고,
+# 로컬 Ollama는 Docker Desktop host를 통해 재사용합니다.
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    # 개인 API Key가 든 .env는 선택 사항입니다. 없으면 .env.example의 기본값과
+    # 앱 내부 기본값으로도 Mock 모드가 실행되어 CI에서 Compose를 검사할 수 있습니다.
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      # 컨테이너 안에서 127.0.0.1은 Backend 자신이므로 host gateway를 사용합니다.
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+    ports:
+      - "8004:8000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    environment:
+      BACKEND_API_URL: http://backend:8000
+    ports:
+      - "8504:8501"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped

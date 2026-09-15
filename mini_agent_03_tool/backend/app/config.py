@@ -17,6 +17,7 @@ class Settings:
     openai_vision_model: str = os.getenv("OPENAI_VISION_MODEL", "gpt-4.1-mini")
     openai_tts_model: str = os.getenv("OPENAI_TTS_MODEL", "gpt-4o-mini-tts")
     openai_tts_voice: str = os.getenv("OPENAI_TTS_VOICE", "coral")
+
     gemini_api_key: str = os.getenv("GEMINI_API_KEY", "")
     gemini_model: str = os.getenv("GEMINI_MODEL", "")
     ollama_base_url: str = os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434").rstrip("/")

@@ -62,6 +62,29 @@ streamlit run .\frontend\app.py
 Ollama는 `C:\mini_agent_st\infra`에서 먼저 실행하고 모델을 내려받아야 합니다.
 Cloud Provider는 `.env`에 해당 API Key와 모델을 설정한 경우에만 호출합니다.
 
+## Docker로 함께 실행
+
+`mini_agent_01_llm` 폴더에서 아래 명령을 실행하면 Frontend, Backend, Ollama가
+같은 Docker Compose 네트워크에서 실행됩니다.
+
+```powershell
+cd C:\mini_agent\mini_agent_01_llm
+docker compose up --build
+```
+
+- Frontend: http://localhost:8501
+- Backend API 문서: http://localhost:8000/docs
+- Ollama: Compose 내부 네트워크에서만 사용
+
+Ollama provider를 사용할 경우 모델은 한 번 내려받아야 합니다.
+
+```powershell
+docker compose exec ollama ollama pull llama3.2
+```
+
+중지는 `docker compose down`으로 합니다. `down -v`는 Ollama 모델 볼륨까지
+삭제하므로 필요할 때만 사용하세요.
+
 ## 확인 순서
 
 1. LLM·Workflow·Agent 메뉴에서 두 판단 결과를 비교합니다.

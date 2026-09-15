@@ -1,4 +1,12 @@
-"""전체 대화 대신 최근 메시지와 간단한 요약만 Prompt에 넣습니다."""
+"""02. 전체 대화 대신 최근 메시지와 간단한 요약만 Prompt에 넣습니다.
+
+학습 목표:
+- 대화가 길어질 때 모든 메시지를 Prompt에 넣지 않는 이유를 이해합니다.
+- 오래된 대화의 요약과 최근 메시지 Window를 구분합니다.
+
+실행: python .\02_conversation_window.py
+외부 서비스: 필요 없음
+"""
 
 from dataclasses import asdict, dataclass
 
@@ -18,9 +26,11 @@ class ConversationWindow:
         self.messages.append(Message(role, content))
 
     def recent(self) -> list[dict]:
+        """가장 최근 메시지를 설정한 개수만큼 반환합니다."""
         return [asdict(message) for message in self.messages[-self.max_recent_messages :]]
 
     def older_summary(self) -> str:
+        """최근 Window에서 밀려난 메시지를 수업용 문자열로 요약합니다."""
         older = self.messages[: -self.max_recent_messages]
         if not older:
             return "이전 대화 없음"
@@ -35,6 +45,11 @@ if __name__ == "__main__":
     window.add("assistant", "교통수단 선호가 있나요?")
     window.add("user", "대중교통을 이용하고 싶어요.")
 
+    print("[02] 대화 Window\n")
     print("전체 메시지 수:", len(window.messages))
-    print("오래된 대화 요약:", window.older_summary())
-    print("최근 메시지:", window.recent())
+    print("Prompt에 유지할 최근 메시지 수:", window.max_recent_messages)
+    print("\n오래된 대화 요약:", window.older_summary())
+    print("\n최근 메시지:")
+    for message in window.recent():
+        print(f"- {message['role']}: {message['content']}")
+    print("\n핵심: Prompt에는 오래된 대화의 요약과 최근 메시지만 전달할 수 있습니다.")
