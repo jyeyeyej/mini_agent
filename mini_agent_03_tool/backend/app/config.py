@@ -22,7 +22,7 @@ class Settings:
     gemini_model: str = os.getenv("GEMINI_MODEL", "")
     ollama_base_url: str = os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434").rstrip("/")
     ollama_model: str = os.getenv("OLLAMA_MODEL", "llama3.2")
-    request_timeout_seconds: float = float(os.getenv("REQUEST_TIMEOUT_SECONDS", "70"))
+    request_timeout_seconds: float = float(os.getenv("REQUEST_TIMEOUT_SECONDS", "60"))
     max_image_size_mb: int = int(os.getenv("MAX_IMAGE_SIZE_MB", "10"))
 
 
