@@ -58,7 +58,6 @@ PC를 재시작한 뒤 컨테이너가 중지되어 있으면 다음 명령으�
 ```powershell
 docker start multimodal-agent-pgvector
 ```
-
 기존 PostgreSQL이 이미 `5433` 포트를 사용 중이면 먼저 해당 컨테이너를 중지하거나, 새 컨테이너와 `DATABASE_URL`에 다른 포트를 함께 지정해야 합니다.
 
 ## 3. 데이터 준비
