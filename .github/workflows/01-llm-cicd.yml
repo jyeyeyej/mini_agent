@@ -97,4 +97,22 @@ jobs:
           AWS_HOST: ${{ secrets.AWS_HOST }}
           AWS_USER: ${{ secrets.AWS_USER }}
         run: |
-          ssh "$AWS_USER@$AWS_HOST" 'cd ~/mini-agent-01-llm && test -f .env && docker compose config --quiet && docker compose up -d --build && curl --fail --retry 12 --retry-delay 5 http://127.0.0.1:8000/health'
+          ssh "$AWS_USER@$AWS_HOST" 'bash -s' <<'REMOTE'
+          set -e
+          cd ~/mini-agent-01-llm
+          test -f .env
+          docker compose config --quiet
+          docker compose up -d --build --remove-orphans
+
+          for attempt in $(seq 1 12); do
+            if curl --fail --silent --show-error http://127.0.0.1:8000/health; then
+              exit 0
+            fi
+            echo "Backend is not ready yet (${attempt}/12)"
+            sleep 5
+          done
+
+          docker compose ps
+          docker compose logs --tail=100 backend
+          exit 1
+          REMOTE
