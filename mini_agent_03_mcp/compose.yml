@@ -1,30 +1,39 @@
+name: mini-agent-03-mcp
+
 services:
   travel-mcp:
     build:
       context: .
       dockerfile: mcp_server/Dockerfile
-    env_file:
-      - .env
     environment:
+      # HTTP MCP Server는 모든 컨테이너 네트워크 인터페이스에서 수신합니다.
       MCP_HOST: 0.0.0.0
-      MCP_PORT: 8010
+      MCP_PORT: "8010"
     ports:
       - "8013:8010"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; socket.create_connection(('127.0.0.1', 8010), 3).close()"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
     restart: unless-stopped
 
   backend:
     build:
       context: .
       dockerfile: backend/Dockerfile
-    env_file:
-      - .env
     environment:
+      # Compose 서비스 이름으로 Travel MCP 컨테이너에 연결합니다.
       TRAVEL_MCP_URL: http://travel-mcp:8010/mcp
+      # .env가 없는 CI에서도 빌드·Compose 검증이 가능하도록 기본값을 둡니다.
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4.1-mini}
     ports:
       - "8003:8000"
     depends_on:
       travel-mcp:
-        condition: service_started
+        condition: service_healthy
     restart: unless-stopped
 
   frontend:
