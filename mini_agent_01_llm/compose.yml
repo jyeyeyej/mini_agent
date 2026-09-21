@@ -5,14 +5,8 @@ services:
       dockerfile: backend/Dockerfile
     env_file:
       - .env
-    environment:
-      # Containers reach other containers by service name, not 127.0.0.1.
-      OLLAMA_BASE_URL: http://ollama:11434
     ports:
       - "8000:8000"
-    depends_on:
-      ollama:
-        condition: service_started
     restart: unless-stopped
 
   frontend:
@@ -27,12 +21,3 @@ services:
       backend:
         condition: service_started
     restart: unless-stopped
-
-  ollama:
-    image: ollama/ollama:latest
-    volumes:
-      - ollama_data:/root/.ollama
-    restart: unless-stopped
-
-volumes:
-  ollama_data:
