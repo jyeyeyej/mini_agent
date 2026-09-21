@@ -1,5 +1,8 @@
+from dataclasses import replace
+
 from fastapi.testclient import TestClient
 
+from app.config import settings
 from app.main import app
 from app.schemas import TravelImageAnalysis
 
@@ -80,13 +83,17 @@ def test_provider_compare_preserves_each_result() -> None:
     assert body["results"][0]["status"] == "success"
 
 
-def test_missing_openai_key_is_explicit() -> None:
+def test_missing_openai_key_is_explicit(monkeypatch) -> None:
+    monkeypatch.setattr(
+        "app.providers.settings",
+        replace(settings, openai_api_key=""),
+    )
+
     response = client.post(
         "/api/generate",
         json={"provider": "openai", "message": "부산 여행을 추천해 주세요."},
     )
-    if response.status_code == 200:
-        return
+
     assert response.status_code == 422
     assert "OPENAI_API_KEY" in response.json()["detail"]
 
